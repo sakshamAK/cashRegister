@@ -4,7 +4,7 @@
   text-align: center;
 }
 body {
-  font-family: roboto;
+  font-family: "roboto", "helveticaNeue", "sans-serif";
   margin: 0;
   background: url("background.png") #2e1aad;
 }
@@ -53,13 +53,13 @@ ol {
 
 p {
   font-size: 19px;
-  font-family: "futura Md Bt";
+  font-family: "futura Md Bt", "Harmonia Sans";
   font-weight: 300;
   text-align: justify;
 }
 
 h1 {
-  font-family: "product sans";
+  font-family: "product sans", gotham;
   font-weight: bold;
   font-size: 40px;
   text-align: center;
@@ -69,4 +69,131 @@ h3 {
   font-family: "gotham HTF";
   font-weight: 600;
   text-align: center;
+}
+
+.gridCol {
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+  width: 350px;
+  padding: 20px 0 0 0;
+}
+
+.moneyCol {
+  list-style-type: none;
+  text-align: center;
+  padding: 0 20px;
+  font-weight: bold;
+}
+
+.cash-rec,
+.bill-rec {
+  width: 88%;
+  position: static;
+  font-size: 12px;
+  text-align: left;
+  margin: 30px 0 -30px -0;
+}
+
+@media screen and (max-width: 1359px) {
+  body {
+    background: url("bg320.svg") repeat-x #2e1aad;
+  }
+  .grid-cont {
+    display: grid;
+    grid-template-columns: 60% 10% 30%;
+  }
+  #container {
+    position: static;
+    margin: 180px 0 0 0;
+    height: 508px;
+    width: 376px;
+  }
+  .gridCol {
+    width: 100%;
+  }
+  h1 {
+    margin-top: 150px;
+  }
+  #information {
+    width: 100%;
+    padding: 30px;
+    margin: 0;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .grid-cont {
+    display: grid;
+    grid-template-columns: 50% 15% 35%;
+  }
+}
+@media screen and (max-width: 1130px) {
+  .grid-cont {
+    display: grid;
+    grid-template-columns: 50% 13% 37%;
+  }
+  h1 {
+    margin-top: 120px;
+  }
+}
+
+@media screen and (max-width: 1040px) {
+  .grid-cont {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #information {
+    width: 90%;
+    margin-top: 50px;
+  }
+  #container {
+    margin: 100px 0 40px 0;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  #container {
+    margin: 100px 0 40px 0;
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  body {
+    background: url("bg320.svg") no-repeat #2e1aad;
+  }
+  .grid-cont {
+    display: flex;
+    flex-direction: column;
+  }
+  #container {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 30px 0;
+    align-items: center;
+    height: 450px;
+    width: 100%;
+  }
+  #information {
+    max-width: 80%;
+    padding: 30px;
+    margin: 0;
+  }
+  .gridCol {
+    width: 100%;
+  }
+  li {
+    padding: 6px;
+  }
+  .resp-text {
+    font-size: 14px;
+    padding-right: 36px;
+  }
+  h1 {
+    margin-top: 120px;
+    font-size: 30px;
+  }
 }
