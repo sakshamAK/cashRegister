@@ -1,24 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles.css";
 
 export default function App() {
   let cashUnits = [0, 0, 0, 0, 0, 0, 0];
   const [result, setResult] = useState("");
+  let [disable, setDisable] = useState(true);
+  const [yourBill, setBill] = useState(0);
+  const [yourCashGiven, setCashGiven] = useState(0);
   const [cashArray, setcashArray] = useState(
     cashUnits.map((item) => <li>{item}</li>)
   );
-  // if(totalCash.value === null){
-  // totalCash.disabled = true;
-  // }
-  function billAmt() {
-    let bill = parseInt(billAmount.value);
-    let cashGiven = parseInt(totalCash.value);
-    let returnedCash = 0;
-    if (billAmount.value == "") {
-      totalCash.disabled = true;
-    } else if (billAmount.value != "") {
-      totalCash.disabled = false;
+  // let billAmount = document.querySelector("#billAmount");
+  // let totalCash = document.querySelector("#totalCash");
+  // console.log(billAmount);
+  const billAmt = (e, id) => {
+    //input and decaration
+    let bill = Number(yourBill);
+    let cashGiven = Number(yourCashGiven);
+    let returnedCash;
+    if (id === "billAmount") setBill(e.target.value);
+    if (id === "totalCash") setCashGiven(e.target.value);
+    returnedCash = 0;
+    console.log(bill, cashGiven);
+
+    // enabling/disabling input field
+
+    if (bill === 0) {
+      setDisable(true);
+    } else if (bill !== 0) {
+      setDisable(false);
     }
+
+    //tell user if cash is enough or not
+
     if (bill > cashGiven) {
       setResult("Not enough cash");
       cashUnits = [0, 0, 0, 0, 0, 0, 0];
@@ -28,18 +42,24 @@ export default function App() {
       cashUnits = [0, 0, 0, 0, 0, 0, 0];
       setcashArray(cashUnits.map((item) => <li>{item}</li>));
     } else if (bill < cashGiven) {
+      // processing
+
       setResult("");
       returnedCash = cashGiven - bill;
       function divider(moneyNumber, index) {
         let cash = Math.floor(returnedCash / moneyNumber);
         returnedCash = returnedCash % moneyNumber;
-        if (cash != 0) {
+        if (cash !== 0) {
           cashUnits[index] = cash;
-        } else {
+        }
+        if (cash < 0) {
           cashUnits[index] = 0;
         }
         return cashUnits;
       }
+
+      //executiom
+
       divider(2000, 6);
       divider(500, 5);
       divider(100, 4);
@@ -47,9 +67,17 @@ export default function App() {
       divider(10, 2);
       divider(5, 1);
       divider(1, 0);
+
+      //output
+
       setcashArray(cashUnits.map((item) => <li>{item}</li>));
     }
-  }
+  };
+
+  useEffect(() => {
+    billAmt();
+  }, [yourBill, yourCashGiven]);
+
   return (
     <div className="App">
       <div className="grid-cont">
@@ -97,20 +125,27 @@ export default function App() {
         </div>
         <span></span>
         <div id="container">
+          {/* bill Text Field */}
+
           <span className="bill-rec">Bill Amount</span>
           <input
             type="number"
             id="billAmount"
-            onChange={billAmt}
+            value={yourBill}
+            onChange={(e) => billAmt(e, "billAmount")}
             placeholder="0"
           />
+
+          {/* cash text field */}
+
           <span className="cash-rec">Total cash recieved</span>
           <input
             type="number"
             id="totalCash"
-            onChange={billAmt}
+            value={yourCashGiven}
+            onChange={(e) => billAmt(e, "totalCash")}
             placeholder="0"
-            disabled
+            disabled={disable}
           />
           <div
             style={{
