@@ -7,64 +7,66 @@ export default function App() {
   let [disable, setDisable] = useState(true);
   const [yourBill, setBill] = useState(0);
   const [yourCashGiven, setCashGiven] = useState(0);
-  const [cashArray, setcashArray] = useState(cashUnits.map((item) => <li>{item}</li>));
+  const [cashArray, setcashArray] = useState(
+    cashUnits.map((item) => <li>{item}</li>)
+  );
   let returnedCash = 0;
 
-    function toggleInput(bill){
-      if (bill === 0) {
-        setDisable(true);
-        setCashGiven(0)
-      } else if (bill !== 0) {
-        setDisable(false);
-      }
+  function toggleInput(bill) {
+    if (bill === 0) {
+      setDisable(true);
+      setCashGiven(0);
+    } else if (bill !== 0) {
+      setDisable(false);
     }
+  }
 
-    const defaultNotes = (statement) => {
-      setResult(statement);
-      cashUnits = [0, 0, 0, 0, 0, 0, 0];
+  const defaultNotes = (statement) => {
+    setResult(statement);
+    cashUnits = [0, 0, 0, 0, 0, 0, 0];
+    setcashArray(cashUnits.map((item) => <li>{item}</li>));
+  };
+
+  const checkCash = (bill, cashGiven, cashUnits) => {
+    if (bill > cashGiven) defaultNotes("Not enough cash");
+    else if (bill === cashGiven) defaultNotes("Nothing to return");
+    else if (bill < cashGiven) {
+      setResult("");
+      returnedCash = cashGiven - bill;
+
+      function divider(moneyNumber, index) {
+        let cash = Math.floor(returnedCash / moneyNumber);
+        returnedCash = returnedCash % moneyNumber;
+        if (cash !== 0) {
+          cashUnits[index] = cash;
+        }
+        if (cash < 0) {
+          cashUnits[index] = 0;
+        }
+        return cashUnits;
+      }
+
+      divider(2000, 6);
+      divider(500, 5);
+      divider(100, 4);
+      divider(20, 3);
+      divider(10, 2);
+      divider(5, 1);
+      divider(1, 0);
+
       setcashArray(cashUnits.map((item) => <li>{item}</li>));
     }
+  };
 
-    const checkCash = (bill, cashGiven, cashUnits) => {
-      if (bill > cashGiven) defaultNotes("Not enough cash"); 
-      else if (bill === cashGiven) defaultNotes("Nothing to return"); 
-      else if (bill < cashGiven) {
-        setResult("");
-        returnedCash = cashGiven - bill;
-
-        function divider(moneyNumber, index) {
-          let cash = Math.floor(returnedCash / moneyNumber);
-          returnedCash = returnedCash % moneyNumber;
-          if (cash !== 0) {
-            cashUnits[index] = cash;
-          }
-          if (cash < 0) {
-            cashUnits[index] = 0;
-          }
-          return cashUnits;
-        }
-  
-        divider(2000, 6);
-        divider(500, 5);
-        divider(100, 4);
-        divider(20, 3);
-        divider(10, 2);
-        divider(5, 1);
-        divider(1, 0);
-
-        setcashArray(cashUnits.map((item) => <li>{item}</li>));
-      }
-    }
+//Onchange function here
 
   const billAmt = (e, id) => {
-
     let bill = Number(yourBill);
     let cashGiven = Number(yourCashGiven);
     if (id === "billAmount") setBill(e.target.value);
     if (id === "totalCash") setCashGiven(e.target.value);
-
-    toggleInput(bill)
-    checkCash(bill, cashGiven, cashUnits)
+    toggleInput(bill);
+    checkCash(bill, cashGiven, cashUnits);
   };
 
   useEffect(() => {
@@ -102,7 +104,7 @@ export default function App() {
             <div
               style={{
                 textAlign: "right",
-                fontSize: "16px"
+                fontSize: "16px",
               }}
             >
               <br />
@@ -146,7 +148,7 @@ export default function App() {
               fontFamily: "roboto",
               width: "320px",
               fontWeight: "bolder",
-              textAlign: "right"
+              textAlign: "right",
             }}
           >
             <span className="resp-text">{result}</span>
@@ -166,7 +168,7 @@ export default function App() {
             <ul
               style={{
                 listStyleType: "none",
-                padding: "0 20px"
+                padding: "0 20px",
               }}
             >
               {cashArray}
