@@ -7,71 +7,64 @@ export default function App() {
   let [disable, setDisable] = useState(true);
   const [yourBill, setBill] = useState(0);
   const [yourCashGiven, setCashGiven] = useState(0);
-  const [cashArray, setcashArray] = useState(
-    cashUnits.map((item) => <li>{item}</li>)
-  );
-  // let billAmount = document.querySelector("#billAmount");
-  // let totalCash = document.querySelector("#totalCash");
-  // console.log(billAmount);
+  const [cashArray, setcashArray] = useState(cashUnits.map((item) => <li>{item}</li>));
+  let returnedCash = 0;
+
+    function toggleInput(bill){
+      if (bill === 0) {
+        setDisable(true);
+        setCashGiven(0)
+      } else if (bill !== 0) {
+        setDisable(false);
+      }
+    }
+
+    const defaultNotes = (statement) => {
+      setResult(statement);
+      cashUnits = [0, 0, 0, 0, 0, 0, 0];
+      setcashArray(cashUnits.map((item) => <li>{item}</li>));
+    }
+
+    const checkCash = (bill, cashGiven, cashUnits) => {
+      if (bill > cashGiven) defaultNotes("Not enough cash"); 
+      else if (bill === cashGiven) defaultNotes("Nothing to return"); 
+      else if (bill < cashGiven) {
+        setResult("");
+        returnedCash = cashGiven - bill;
+
+        function divider(moneyNumber, index) {
+          let cash = Math.floor(returnedCash / moneyNumber);
+          returnedCash = returnedCash % moneyNumber;
+          if (cash !== 0) {
+            cashUnits[index] = cash;
+          }
+          if (cash < 0) {
+            cashUnits[index] = 0;
+          }
+          return cashUnits;
+        }
+  
+        divider(2000, 6);
+        divider(500, 5);
+        divider(100, 4);
+        divider(20, 3);
+        divider(10, 2);
+        divider(5, 1);
+        divider(1, 0);
+
+        setcashArray(cashUnits.map((item) => <li>{item}</li>));
+      }
+    }
+
   const billAmt = (e, id) => {
-    //input and decaration
+
     let bill = Number(yourBill);
     let cashGiven = Number(yourCashGiven);
-    let returnedCash;
     if (id === "billAmount") setBill(e.target.value);
     if (id === "totalCash") setCashGiven(e.target.value);
-    returnedCash = 0;
-    console.log(bill, cashGiven);
 
-    // enabling/disabling input field
-
-    if (bill === 0) {
-      setDisable(true);
-    } else if (bill !== 0) {
-      setDisable(false);
-    }
-
-    //tell user if cash is enough or not
-
-    if (bill > cashGiven) {
-      setResult("Not enough cash");
-      cashUnits = [0, 0, 0, 0, 0, 0, 0];
-      setcashArray(cashUnits.map((item) => <li>{item}</li>));
-    } else if (bill === cashGiven) {
-      setResult("Nothing to return");
-      cashUnits = [0, 0, 0, 0, 0, 0, 0];
-      setcashArray(cashUnits.map((item) => <li>{item}</li>));
-    } else if (bill < cashGiven) {
-      // processing
-
-      setResult("");
-      returnedCash = cashGiven - bill;
-      function divider(moneyNumber, index) {
-        let cash = Math.floor(returnedCash / moneyNumber);
-        returnedCash = returnedCash % moneyNumber;
-        if (cash !== 0) {
-          cashUnits[index] = cash;
-        }
-        if (cash < 0) {
-          cashUnits[index] = 0;
-        }
-        return cashUnits;
-      }
-
-      //executiom
-
-      divider(2000, 6);
-      divider(500, 5);
-      divider(100, 4);
-      divider(20, 3);
-      divider(10, 2);
-      divider(5, 1);
-      divider(1, 0);
-
-      //output
-
-      setcashArray(cashUnits.map((item) => <li>{item}</li>));
-    }
+    toggleInput(bill)
+    checkCash(bill, cashGiven, cashUnits)
   };
 
   useEffect(() => {
