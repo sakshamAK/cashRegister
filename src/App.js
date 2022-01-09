@@ -3,28 +3,25 @@ import "./styles.css";
 
 export default function App() {
   let cashUnits = [0, 0, 0, 0, 0, 0, 0];
-  const [result, setResult] = useState("");
+  let returnedCash = 0;
   let [disable, setDisable] = useState(true);
+  const [result, setResult] = useState("");
   const [yourBill, setBill] = useState(0);
   const [yourCashGiven, setCashGiven] = useState(0);
-  const [cashArray, setcashArray] = useState(
-    cashUnits.map((item) => <li>{item}</li>)
-  );
-  let returnedCash = 0;
+  const [cashArray, setcashArray] = useState(cashUnits.map((item) => <li>{item}</li>));
 
-  function toggleInput(bill) {
+  const toggleInput = bill => {
     if (bill === 0) {
       setDisable(true);
       setCashGiven(0);
-    } else if (bill !== 0) {
-      setDisable(false);
-    }
+    } 
+    else if (bill !== 0) setDisable(false)
   }
 
-  const defaultNotes = (statement) => {
+  const defaultNotes = statement => {
     setResult(statement);
     cashUnits = [0, 0, 0, 0, 0, 0, 0];
-    setcashArray(cashUnits.map((item) => <li>{item}</li>));
+    setcashArray(cashUnits.map(item => <li>{item}</li>));
   };
 
   const checkCash = (bill, cashGiven, cashUnits) => {
@@ -34,15 +31,11 @@ export default function App() {
       setResult("");
       returnedCash = cashGiven - bill;
 
-      function divider(moneyNumber, index) {
+      const divider = (moneyNumber, index) => {
         let cash = Math.floor(returnedCash / moneyNumber);
-        returnedCash = returnedCash % moneyNumber;
-        if (cash !== 0) {
-          cashUnits[index] = cash;
-        }
-        if (cash < 0) {
-          cashUnits[index] = 0;
-        }
+        returnedCash %= moneyNumber;
+        (cash !== 0) ? cashUnits[index] = cash : '';
+        (cash < 0) ? cashUnits[index] = 0 : '';
         return cashUnits;
       }
 
@@ -63,8 +56,8 @@ export default function App() {
   const billAmt = (e, id) => {
     let bill = Number(yourBill);
     let cashGiven = Number(yourCashGiven);
-    if (id === "billAmount") setBill(e.target.value);
-    if (id === "totalCash") setCashGiven(e.target.value);
+    (id === "billAmount") ? setBill(e.target.value) : '';
+    (id === "totalCash") ? setCashGiven(e.target.value) : '';
     toggleInput(bill);
     checkCash(bill, cashGiven, cashUnits);
   };
@@ -127,7 +120,7 @@ export default function App() {
             type="number"
             id="billAmount"
             value={yourBill}
-            onChange={(e) => billAmt(e, "billAmount")}
+            onChange={e => billAmt(e, "billAmount")}
             placeholder="0"
           />
 
@@ -138,7 +131,7 @@ export default function App() {
             type="number"
             id="totalCash"
             value={yourCashGiven}
-            onChange={(e) => billAmt(e, "totalCash")}
+            onChange={e => billAmt(e, "totalCash")}
             placeholder="0"
             disabled={disable}
           />
